@@ -14,6 +14,7 @@ public abstract class Enemy : MonoBehaviour
     protected Animator _animator;
     protected bool _facingRight = true;
     protected float distance;
+    protected bool isDead = false;
 
     protected Player _player;
 
@@ -51,9 +52,12 @@ public abstract class Enemy : MonoBehaviour
             return;
         }
 
-        CheckDirection();
+        if (!isDead)
+        {
+            CheckDirection();
 
-        Movement();
+            Movement();
+        }
     }
 
     public virtual void CheckDistance()

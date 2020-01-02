@@ -16,6 +16,7 @@ public class Player : MonoBehaviour, IDamageable
 
     [SerializeField] private float runSpeed = 40f;
     [SerializeField] private float jumpForce = 5.0f;
+    [SerializeField] private int health = 5;
 
     [SerializeField] private float rayCastDistance = 0.75f;
     [SerializeField] private LayerMask _groundLayer;
@@ -27,6 +28,8 @@ public class Player : MonoBehaviour, IDamageable
         _playerRigidbody = GetComponent<Rigidbody2D>();
         _playerAnimation = GetComponent<PlayerAnimation>();
         _playerSpriteRenderer = GetComponentInChildren<SpriteRenderer>();
+
+        Health = health;
     }
     
     void Update()
@@ -114,6 +117,11 @@ public class Player : MonoBehaviour, IDamageable
     // Damages the player
     public void Damage()
     {
-        Debug.Log("Player Damage Called");
+        Health--;
+        
+        if (Health < 1)
+        {
+
+        }
     }
 }
