@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : MonoBehaviour
+public class Player : MonoBehaviour, IDamageable
 {
     // Variables
     private float move = 0f;
@@ -19,6 +19,8 @@ public class Player : MonoBehaviour
 
     [SerializeField] private float rayCastDistance = 0.75f;
     [SerializeField] private LayerMask _groundLayer;
+
+    public int Health { get; set; }
     
     void Start()
     {
@@ -107,5 +109,11 @@ public class Player : MonoBehaviour
     private void FixedUpdate()
     {
         _playerRigidbody.velocity = new Vector2(move * Time.fixedDeltaTime * 10f * runSpeed, _playerRigidbody.velocity.y);
+    }
+
+    // Damages the player
+    public void Damage()
+    {
+        Debug.Log("Player Damage Called");
     }
 }

@@ -5,7 +5,7 @@ using UnityEngine;
 public abstract class Enemy : MonoBehaviour
 {
     [SerializeField] protected int health;
-    [SerializeField] protected int speed;
+    [SerializeField] protected float speed;
     [SerializeField] protected int gems;
 
     [SerializeField] protected Transform pointA, pointB;
@@ -13,6 +13,9 @@ public abstract class Enemy : MonoBehaviour
     protected Vector3 _currentTarget;
     protected Animator _animator;
     protected bool _facingRight = true;
+    protected float distance;
+
+    protected Player _player;
 
     private void Start()
     {
@@ -23,16 +26,39 @@ public abstract class Enemy : MonoBehaviour
     {
         _currentTarget = pointB.position;
         _animator = GetComponentInChildren<Animator>();
+        _player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
     }
 
     public virtual void Update()
     {
-        if (_animator.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
+        CheckDistance();
+
+        if (_animator.GetCurrentAnimatorStateInfo(0).IsName("Idle") || _animator.GetCurrentAnimatorStateInfo(0).IsName("Hit") || _animator.GetCurrentAnimatorStateInfo(0).IsName("Attack"))
+        {
+            if (_animator.GetBool("InCombat"))
+            {
+                Vector3 direction = _player.transform.localPosition - transform.localPosition;
+
+                if (direction.x < 0 && _facingRight)
+                {
+                    Flip();
+                }
+                else if (direction.x > 0 && !_facingRight)
+                {
+                    Flip();
+                }
+            }
             return;
+        }
 
         CheckDirection();
 
         Movement();
+    }
+
+    public virtual void CheckDistance()
+    {
+        distance = Vector3.Distance(transform.localPosition, _player.transform.localPosition);
     }
 
     public virtual void CheckDirection()
@@ -40,12 +66,10 @@ public abstract class Enemy : MonoBehaviour
         if (_currentTarget == pointA.position && _facingRight)
         {
             Flip();
-            _facingRight = false;
         }
         else if (_currentTarget == pointB.position && !_facingRight)
         {
             Flip();
-            _facingRight = true;
         }
     }
 
@@ -54,6 +78,7 @@ public abstract class Enemy : MonoBehaviour
         Vector3 theScale = transform.localScale;
         theScale.x *= -1;
         transform.localScale = theScale;
+        _facingRight = !_facingRight;
     }
 
     public virtual void Movement()
