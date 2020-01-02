@@ -10,9 +10,9 @@ public abstract class Enemy : MonoBehaviour
 
     [SerializeField] protected Transform pointA, pointB;
 
-    public virtual void Attack()
+    public virtual void Movement()
     {
-        Debug.Log("Base attack called by " + this.gameObject.name);
+
     }
 
     public abstract void Update();

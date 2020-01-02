@@ -17,29 +17,11 @@ public class MossGiant : Enemy
     public override void Update()
     {
         if (_animator.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
-        {
             return;
-        }
 
         CheckDirection();
 
         Movement();
-    }
-    
-    private void Movement()
-    {
-        if (transform.position == pointA.position)
-        {
-            _currentTarget = pointB.position;
-            _animator.SetTrigger("Idle");
-        }
-        else if (transform.position == pointB.position)
-        {
-            _currentTarget = pointA.position;
-            _animator.SetTrigger("Idle");
-        }
-
-        transform.position = Vector3.MoveTowards(transform.position, _currentTarget, speed * Time.deltaTime);
     }
 
     private void CheckDirection()
@@ -54,6 +36,22 @@ public class MossGiant : Enemy
             Flip();
             _facingRight = true;
         }
+    }
+
+    private void Movement()
+    {
+        if (transform.position == pointA.position)
+        {
+            _currentTarget = pointB.position;
+            _animator.SetTrigger("Idle");
+        }
+        else if (transform.position == pointB.position)
+        {
+            _currentTarget = pointA.position;
+            _animator.SetTrigger("Idle");
+        }
+
+        transform.position = Vector3.MoveTowards(transform.position, _currentTarget, speed * Time.deltaTime);
     }
 
     private void Flip()
