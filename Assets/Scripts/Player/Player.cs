@@ -9,10 +9,11 @@ public class Player : MonoBehaviour, IDamageable
     private bool _resetJump = false;
     private bool _grounded = false;
     private bool _facingRight = true;
+    private bool _isDead = false;
 
     private Rigidbody2D _playerRigidbody;
     private PlayerAnimation _playerAnimation;
-    private SpriteRenderer _playerSpriteRenderer;
+    private BoxCollider2D _playerHitBox;
 
     [SerializeField] private float runSpeed = 40f;
     [SerializeField] private float jumpForce = 5.0f;
@@ -27,14 +28,23 @@ public class Player : MonoBehaviour, IDamageable
     {
         _playerRigidbody = GetComponent<Rigidbody2D>();
         _playerAnimation = GetComponent<PlayerAnimation>();
-        _playerSpriteRenderer = GetComponentInChildren<SpriteRenderer>();
+        _playerHitBox = GetComponent<BoxCollider2D>();
 
         Health = health;
     }
     
     void Update()
     {
-        Movement();
+        if (!_playerAnimation.PlayerDead())
+        {
+            Movement();
+        }
+        else if (_playerAnimation.PlayerDead())
+        {
+            _isDead = true;
+            this.tag = "Untagged";
+            return;
+        }
 
         // Allows the player to attack
         if (Input.GetMouseButtonDown(0) && IsGrounded() == true)
@@ -121,7 +131,16 @@ public class Player : MonoBehaviour, IDamageable
         
         if (Health < 1)
         {
-
+            _playerAnimation.PlayDeathAnimation();
         }
+        else
+        {
+            _playerAnimation.PlayHitAnimation();
+        }
+    }
+
+    public bool IsDead()
+    {
+        return _isDead;
     }
 }

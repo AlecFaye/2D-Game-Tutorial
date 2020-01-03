@@ -8,6 +8,8 @@ public class PlayerAnimation : MonoBehaviour
     private Animator m_playerAnimator;
     private Animator m_swordAnimator;
 
+    private bool isDead = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -29,5 +31,21 @@ public class PlayerAnimation : MonoBehaviour
     {
         m_playerAnimator.SetTrigger("Attack");
         m_swordAnimator.SetTrigger("SwordAnimation");
+    }
+
+    public void PlayHitAnimation()
+    {
+        m_playerAnimator.SetTrigger("Hit");
+    }
+
+    public void PlayDeathAnimation()
+    {
+        m_playerAnimator.SetTrigger("Death");
+        isDead = true;
+    }
+
+    public bool PlayerDead()
+    {
+        return isDead;
     }
 }

@@ -32,12 +32,17 @@ public abstract class Enemy : MonoBehaviour
 
     public virtual void Update()
     {
-        CheckDistance();
+        if (_player.IsDead())
+        {
+            _animator.SetBool("InCombat", false);
+        }
 
         if (_animator.GetCurrentAnimatorStateInfo(0).IsName("Idle") || _animator.GetCurrentAnimatorStateInfo(0).IsName("Hit") || _animator.GetCurrentAnimatorStateInfo(0).IsName("Attack"))
         {
             if (_animator.GetBool("InCombat"))
             {
+                CheckDistance();
+
                 Vector3 direction = _player.transform.localPosition - transform.localPosition;
 
                 if (direction.x < 0 && _facingRight)
