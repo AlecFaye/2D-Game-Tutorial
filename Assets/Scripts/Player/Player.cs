@@ -17,11 +17,12 @@ public class Player : MonoBehaviour, IDamageable
 
     [SerializeField] private float runSpeed = 40f;
     [SerializeField] private float jumpForce = 5.0f;
-    [SerializeField] private int health = 5;
+    // [SerializeField] private int health = 5;
 
     [SerializeField] private float rayCastDistance = 0.75f;
     [SerializeField] private LayerMask _groundLayer;
 
+    public int diamonds = 0;
     public int Health { get; set; }
     
     void Start()
@@ -30,21 +31,23 @@ public class Player : MonoBehaviour, IDamageable
         _playerAnimation = GetComponent<PlayerAnimation>();
         _playerHitBox = GetComponent<BoxCollider2D>();
 
-        Health = health;
+        Health = 4;
     }
     
     void Update()
     {
-        if (!_playerAnimation.PlayerDead())
-        {
-            Movement();
-        }
-        else if (_playerAnimation.PlayerDead())
+        if (_playerAnimation.PlayerDead())
         {
             _isDead = true;
             this.tag = "Untagged";
             return;
         }
+
+        // Updates the UI to show the total gem count
+        UIManager.Instance.UpdateGemCount(diamonds);
+
+        // Allows the player to move
+        Movement();
 
         // Allows the player to attack
         if (Input.GetMouseButtonDown(0) && IsGrounded() == true)
@@ -127,7 +130,11 @@ public class Player : MonoBehaviour, IDamageable
     // Damages the player
     public void Damage()
     {
+        // Decrease Health by 1
         Health--;
+
+        // Update UI display to show the current amount of health correctly
+        UIManager.Instance.UpdateLives(Health);
         
         if (Health < 1)
         {
@@ -139,6 +146,7 @@ public class Player : MonoBehaviour, IDamageable
         }
     }
 
+    // Returns if the player is dead
     public bool IsDead()
     {
         return _isDead;

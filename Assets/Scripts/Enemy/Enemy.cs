@@ -4,6 +4,8 @@ using UnityEngine;
 
 public abstract class Enemy : MonoBehaviour
 {
+    public GameObject diamondPrefab;
+
     [SerializeField] protected int health;
     [SerializeField] protected float speed;
     [SerializeField] protected int gems;
@@ -12,11 +14,11 @@ public abstract class Enemy : MonoBehaviour
 
     protected Vector3 _currentTarget;
     protected Animator _animator;
+    protected Player _player;
+
     protected bool _facingRight = true;
     protected float distance;
     protected bool isDead = false;
-
-    protected Player _player;
 
     private void Start()
     {
