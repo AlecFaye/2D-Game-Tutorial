@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityStandardAssets.CrossPlatformInput;
 
 public class Player : MonoBehaviour, IDamageable
 {
@@ -10,6 +11,7 @@ public class Player : MonoBehaviour, IDamageable
     private bool _grounded = false;
     private bool _facingRight = true;
     private bool _isDead = false;
+    private bool _resetAttack = false;
 
     private Rigidbody2D _playerRigidbody;
     private PlayerAnimation _playerAnimation;
@@ -50,16 +52,20 @@ public class Player : MonoBehaviour, IDamageable
         Movement();
 
         // Allows the player to attack
-        if (Input.GetMouseButtonDown(0) && IsGrounded() == true)
+        if ((Input.GetKeyDown(KeyCode.F) || CrossPlatformInputManager.GetButtonDown("A_Button")) && IsGrounded() == true)
         {
-            _playerAnimation.Attack();
+            if (_resetAttack == false)
+            {
+                _playerAnimation.Attack();
+                StartCoroutine(ResetAttackRoutine());
+            }
         }
     }
 
     private void Movement()
     {
         // Get horizontal keys A, D, Left Arrow, Right Arrow
-        move = Input.GetAxisRaw("Horizontal");
+        move = CrossPlatformInputManager.GetAxisRaw("Horizontal"); // Input.GetAxisRaw("Horizontal");
 
         // Always checks if you are grounded
         _grounded = IsGrounded();
@@ -80,7 +86,7 @@ public class Player : MonoBehaviour, IDamageable
         _playerAnimation.Move(move);
 
         // Allows the player to jump if the space key is pressed and the player is grounded
-        if (Input.GetKeyDown(KeyCode.Space) && IsGrounded() == true)
+        if ((Input.GetKeyDown(KeyCode.Space) || CrossPlatformInputManager.GetButtonDown("B_Button")) && IsGrounded())
         {
             _playerRigidbody.velocity = new Vector2(_playerRigidbody.velocity.x, jumpForce);
             StartCoroutine(ResetJumpRoutine());
@@ -121,6 +127,13 @@ public class Player : MonoBehaviour, IDamageable
         _resetJump = false;
     }
 
+    IEnumerator ResetAttackRoutine()
+    {
+        _resetAttack = true;
+        yield return new WaitForSeconds(0.5f);
+        _resetAttack = false;
+    }
+
     // Moves the player
     private void FixedUpdate()
     {
@@ -138,16 +151,16 @@ public class Player : MonoBehaviour, IDamageable
         
         if (Health < 1)
         {
-            _playerAnimation.PlayDeathAnimation();
+            _playerAnimation.Death();
         }
         else
         {
-            _playerAnimation.PlayHitAnimation();
+            _playerAnimation.Hit();
         }
     }
 
     // Returns if the player is dead
-    public bool IsDead()
+    public bool IsPlayerDead()
     {
         return _isDead;
     }

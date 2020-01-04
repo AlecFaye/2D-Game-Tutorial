@@ -8,7 +8,7 @@ public class UIManager : MonoBehaviour
     public Text playerGemCountText;
     public Image selectionImg;
     public Text gemCountText;
-    public Image[] life_points = new Image[4];
+    public Image[] life_points;
 
     private static UIManager _instance;
 
@@ -50,11 +50,7 @@ public class UIManager : MonoBehaviour
         // Loops through the remaining number of lives to display
         for (int i = 0; i < life_points.Length; i++)
         {
-            if (i < livesRemaining)
-            {
-                life_points[i].enabled = true;
-            }
-            else
+            if (i == livesRemaining)
             {
                 life_points[i].enabled = false;
             }

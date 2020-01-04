@@ -34,7 +34,7 @@ public abstract class Enemy : MonoBehaviour
 
     public virtual void Update()
     {
-        if (_player.IsDead())
+        if (_player.IsPlayerDead())
         {
             _animator.SetBool("InCombat", false);
         }

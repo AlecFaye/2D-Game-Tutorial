@@ -57,19 +57,19 @@ public class Shop : MonoBehaviour
         switch (item)
         {
             case 0: // Flame Sword
-                UIManager.Instance.UpdateShopSelection(80);
+                UIManager.Instance.UpdateShopSelection(40);
                 currentItemSelected = 0;
                 currentItemPrice = 200;
                 break;
 
             case 1: // Boots of Flight
-                UIManager.Instance.UpdateShopSelection(-25);
+                UIManager.Instance.UpdateShopSelection(-54);
                 currentItemSelected = 1;
                 currentItemPrice = 400;
                 break;
 
             case 2: // Castle Key
-                UIManager.Instance.UpdateShopSelection(-130);
+                UIManager.Instance.UpdateShopSelection(-148);
                 currentItemSelected = 2;
                 currentItemPrice = 100;
                 break;
